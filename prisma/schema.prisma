@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  password  String
+  role      Role    @default(Student)
+  gender    String
+  address   String
+  phone     String
+  birthDate DateTime @db.Date
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  StudentClass StudentClass[]
+}
+
+enum Role {
+  Administrator
+  Student
+  Buyer
+}
+
+model Classes {
+  id        Int      @id @default(autoincrement())
+  name      String
+  grade     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  StudentClass StudentClass[]
+}
+
+model AcademicYear {
+  id        Int      @id @default(autoincrement())
+  name      String
+  status    Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  StudentClass StudentClass[]
+}
+
+model StudentClass {
+  id            Int      @id @default(autoincrement())
+  studentId     Int
+  classId       Int
+  academicYearId  Int
+  qrCode        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  student       User     @relation(fields: [studentId], references: [id])
+  class         Classes  @relation(fields: [classId], references: [id])
+  academicYears AcademicYear @relation(fields: [academicYearId], references: [id])
+
+  Transaction Transaction[]
+}
+
+model Transaction {
+  id        Int      @id @default(autoincrement())
+  studentClassId Int
+  amount    Float @db.Double
+  type     TransactionType
+  saldo     Float @db.Double
+  limit     Float @db.Double
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  studentClass StudentClass @relation(fields: [studentClassId], references: [id])
+}
+
+enum TransactionType {
+  Payment
+  Refund
+}
