@@ -5,9 +5,10 @@ const { academicYear } = new PrismaClient();
 
 const create = async(req, res, next) => {
   try {
-    const exist = await academicYear.findUnique({
+    const exist = await academicYear.findFirst({
       where: {
-        name: req.body.name
+        name: req.body.name,
+        semester: req.body.semester
       }
     });
 

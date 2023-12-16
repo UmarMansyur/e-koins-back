@@ -16,7 +16,7 @@ const create = async (req, res, next) => {
     }
 
     const data = {};
-
+    req.body.birthDate = new Date(req.body.birthDate);
     const response = await user.create({
       data: req.body
     });

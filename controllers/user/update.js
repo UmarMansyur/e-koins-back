@@ -2,13 +2,14 @@ const { PrismaClient } = require("@prisma/client");
 const { uproccessableEntity } = require("../../helpers/ApiError");
 const { success } = require("../../helpers/HandleResponse");
 const { user, studentClass } = new PrismaClient();
+const bcrypt = require('bcrypt');
 
 const update = async (req, res, next) => {
   try {
     const { id } = req.params;
     const exist = await user.findUnique({
       where: {
-        id
+        id: Number(id)
       }
     });
 
@@ -17,11 +18,18 @@ const update = async (req, res, next) => {
     }
 
     const data = {};
+    if(req.body.password) {
+      req.body.password = await bcrypt.hash(req.body.password, 10);
+    }
+
+    if(req.body.password == '') {
+      delete req.body.password;
+    }
 
     const response = await user.update({
       data: req.body,
       where: {
-        id
+        id: Number(id)
       }
     });
 

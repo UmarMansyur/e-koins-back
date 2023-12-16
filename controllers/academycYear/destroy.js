@@ -6,7 +6,7 @@ const { academicYear } = new PrismaClient();
 const destroy = async(req, res, next) => {
   try {
     const { id } = req.params;
-    const exist = await academicYear.findUnique({
+    const exist = await academicYear.findFirst({
       where: {
         name: req.body.name
       }
@@ -18,7 +18,7 @@ const destroy = async(req, res, next) => {
 
     const response = await academicYear.delete({
       where: {
-        id
+        id: Number(id)
       }
     });
     return success(res, response, 'Tahun akademik berhasil dihapus');

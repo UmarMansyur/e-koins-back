@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb
+    container_name: db_mariadb
+    restart: always
+    environment:
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: e_koin
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+      dockerfile: DockerFile
+    environment:
+      - DATABASE_URL=mysql://root:@db_mariadb:3306/e_koin # Ganti dengan kata sandi yang sama dengan MySQL
+      - JWT_SECRET_KEY=khanazulfanaimam
+      - IMAGEKIT_PUBLIC_KEY=public_zvbKR1yVvHfTs10j2TnNH/t9rNU=
+      - IMAGEKIT_PRIVATE_KEY=private_cnF5s+oz55nNIPEwVLf0mZrI4z8=
+      - IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/8zmr0xxik
+    restart: always
+    ports:
+      - "1222:3000"
+    depends_on:
+      - mariadb
+    volumes:
+      - .:/usr/src/app
+    container_name: be_ekoin
+
+volumes: 
+  data: {}

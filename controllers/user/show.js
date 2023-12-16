@@ -7,9 +7,9 @@ const show = async (req, res, next) => {
   try {
     const { id, role } = req.params;
     if(role === 'student') {
-      const exist = await user.findUnique({
+      const exist = await user.findFirst({
         where: {
-          id
+          id: Number(id),
         },
         include: {
           StudentClass: true
@@ -25,7 +25,7 @@ const show = async (req, res, next) => {
 
     const exist = await user.findUnique({
       where: {
-        id
+        id: Number(id),
       }
     });
 

@@ -6,21 +6,17 @@ const { academicYear } = new PrismaClient();
 const show = async(req, res, next) => {
   try {
     const { id } = req.params;
-    const exist = await academicYear.findUnique({
+    const exist = await academicYear.findFirst({
       where: {
-        name: req.body.name
+        id: Number(id)
       }
     });
 
     if(!exist) {
       return notFound('Tahun akademik tidak ditemukan');
     }
-
-    const response = await academicYear.findUnique({
-      id
-    });
     
-    return success(res, response, 'Tahun akademik berhasil dihapus');
+    return success(res, exist, 'Tahun akademik berhasil dihapus');
   } catch (error) {
     next(error)
   }

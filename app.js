@@ -14,10 +14,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/', indexRouter);
+app.use('/api/v1', indexRouter);
 
 app.use((err, req, res, next) => {
-  return error(res, err.message || "Something went wrong", err.status || 500);
+  console.log(err.message);
+  return error(res, err);
 });
 
 module.exports = app;

@@ -8,8 +8,8 @@ const showAll = async (req, res, next) => {
   try {
     const { role = 'administrator' } = req.params;
 
-    if(rolw === 'student') {
-      const data = await paginate(req, user, {
+    if(role === 'student') {
+      const data = await paginate(req, res, user, {
         where: {
           role
         },
@@ -20,7 +20,7 @@ const showAll = async (req, res, next) => {
       return success(res, data, 'Pengguna berhasil ditampilkan');
     }
 
-    const data = await paginate(req, user);
+    const data = await paginate(req, res, user);
     return success(res, data, 'Pengguna berhasil ditampilkan');
   } catch (error) {
     next(error);

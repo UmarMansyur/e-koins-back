@@ -12,8 +12,8 @@ const paginate = async (req, rep, model, params = null) => {
     const offset = query.page > 1 ? (query.page - 1) * query.limit : 0;
 
     const paginate = {
-      skip: offset,
-      take: query.limit
+      skip: Number(offset),
+      take: Number(query.limit)
     }
 
     const include = {
@@ -39,7 +39,7 @@ const paginate = async (req, rep, model, params = null) => {
     return {
       total_page: totalPages,
       total_data: totalRows,
-      current_page: query.page || 1,
+      current_page: Number(query.page) || 1,
       data: result
     };
 

@@ -3,13 +3,14 @@ const { uproccessableEntity } = require("../../helpers/ApiError");
 const { success } = require("../../helpers/HandleResponse");
 const { user } = new PrismaClient();
 
+
 const destroy = async (req, res, next) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
 
     const exist = await user.findUnique({
       where: {
-        id
+        id: Number(id)
       }
     });
 
@@ -19,7 +20,7 @@ const destroy = async (req, res, next) => {
 
     await user.delete({
       where: {
-        id
+        id: Number(id)
       }
     });
 

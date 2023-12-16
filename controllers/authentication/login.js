@@ -2,11 +2,13 @@ const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcrypt");
 const { unauthorized } = require("../../helpers/ApiError");
 const { user } = new PrismaClient();
+const jwt = require("jsonwebtoken");
+const { success } = require("../../helpers/HandleResponse");
 
 const login = async (req, res, next) => {
   try {
     const { name, password } = req.body;
-    const exist = await user.findUnique({
+    const exist = await user.findFirst({
       where: {
         name
       }
@@ -28,7 +30,7 @@ const login = async (req, res, next) => {
       role: exist.role
     };
 
-    const token = await jwt.sign(payload, process.env.JWT_SECRET, {
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: '1d'
     });
 
