@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 
 const update = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params;  
     const exist = await user.findUnique({
       where: {
         id: Number(id)
@@ -22,10 +22,20 @@ const update = async (req, res, next) => {
       req.body.password = await bcrypt.hash(req.body.password, 10);
     }
 
+    if(req.body.birthDate) {
+      req.body.birthDate = new Date(req.body.birthDate);
+    }
+
     if(req.body.password == '') {
       delete req.body.password;
     }
+  
+    const classId = req.body.classId;
+    const academicYearId = req.body.academicYearId;
 
+    delete req.body.classId;
+    delete req.body.academicYearId;
+    
     const response = await user.update({
       data: req.body,
       where: {
@@ -36,7 +46,7 @@ const update = async (req, res, next) => {
     data.user = response;
 
     if (req.body.role === 'Student') {
-      const existStudent = await studentClass.findUnique({
+      const existStudent = await studentClass.findFirst({
         where: {
           studentId: response.id,
           academicYearId: req.body.academicYearId
@@ -50,13 +60,11 @@ const update = async (req, res, next) => {
       const student = await studentClass.update({
         data: {
           studentId: response.id,
-          classId: req.body.classId,
-          academicYearId: req.body.academicYearId,
-          qrCode: req.body.qrCode
+          classId: classId,
+          academicYearId: academicYearId,
         },
         where: {
-          studentId: response.id,
-          academicYearId: req.body.academicYearId
+          id: existStudent.id
         }
       });
 

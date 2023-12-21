@@ -20,9 +20,11 @@ const paginate = async (req, rep, model, params = null) => {
       ...params
     }
 
+    console.log(include);
+
     const result = await model.findMany({
       ...paginate,
-     include
+     ...include
     });
     
 

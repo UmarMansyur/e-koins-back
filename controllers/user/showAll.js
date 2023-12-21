@@ -1,22 +1,22 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient, Role } = require("@prisma/client");
 const { uproccessableEntity } = require("../../helpers/ApiError");
 const { success } = require("../../helpers/HandleResponse");
-const { user } = new PrismaClient();
+const { user, studentClass } = new PrismaClient();
 const paginate = require("../../helpers/Paginate");
 
 const showAll = async (req, res, next) => {
   try {
-    const { role = 'administrator' } = req.params;
+    const { role = 'administrator' } = req.query;
 
     if(role === 'student') {
-      const data = await paginate(req, res, user, {
-        where: {
-          role
-        },
+      const data = await paginate(req, res, studentClass, {
         include: {
-          StudentClass: true
+          student: true,
+          class: true,
+          academicYears: true
         }
       });
+      if(!data) return uproccessableEntity('Pengguna tidak ditemukan');
       return success(res, data, 'Pengguna berhasil ditampilkan');
     }
 

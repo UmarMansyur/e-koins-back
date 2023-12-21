@@ -7,10 +7,10 @@ const { success } = require("../../helpers/HandleResponse");
 
 const login = async (req, res, next) => {
   try {
-    const { name, password } = req.body;
+    const { email, password } = req.body;
     const exist = await user.findFirst({
       where: {
-        name
+        email
       }
     });
 

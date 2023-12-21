@@ -36,7 +36,6 @@ enum Role {
 model Classes {
   id        Int      @id @default(autoincrement())
   name      String
-  grade     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -75,7 +74,6 @@ model Transaction {
   amount    Float
   type     TransactionType
   saldo     Float
-  limit     Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   studentClass StudentClass @relation(fields: [studentClassId], references: [id])

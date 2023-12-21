@@ -9,6 +9,7 @@ const update = async(req, res, next) => {
     const exist = await academicYear.findFirst({
       where: {
         name: req.body.name,
+        semester: req.body.semester,
         id: {
           not: Number(id)
         }
@@ -19,6 +20,18 @@ const update = async(req, res, next) => {
       return uproccessableEntity('Tahun akademik berhasil dibuat');
     }
 
+    if(req.body.status == true) {
+      await academicYear.updateMany({
+        data: {
+          status: false
+        },
+        where: {
+          id: {
+            not: Number(id)
+          }
+        }
+      });
+    }
     const response = await academicYear.update({
       data: req.body,
       where: {

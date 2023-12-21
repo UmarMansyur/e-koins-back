@@ -5,7 +5,7 @@ const { transaction, studentClass } = new PrismaClient();
 
 const create = async(req, res, next) => {
   try {
-    const exist = await studentClass.findUnique({
+    const exist = await studentClass.findFirst({
       where: {
         id: req.body.studentClassId
       }
@@ -15,7 +15,7 @@ const create = async(req, res, next) => {
       return uproccessableEntity('Siswa tidak ditemukan');
     }
 
-    const saldo = await transaction.findUnique({
+    const saldo = await transaction.findFirst({
       where: {
         studentClassId: req.body.studentClassId
       }
@@ -30,14 +30,14 @@ const create = async(req, res, next) => {
       });
     }
 
-    let nominalSaldo = req.body.saldo;
+    let nominalSaldo = req.body.amount;
 
     if(req.body.type === 'Payment') {
-      nominalSaldo = req.body.saldo + saldo.saldo;
+      nominalSaldo = req.body.amount + saldo.saldo;
     }
 
     if(req.body.type === 'Refund') {
-      nominalSaldo = saldo.saldo - req.body.saldo;
+      nominalSaldo = saldo.saldo - req.body.amount;
       if(nominalSaldo < 0) {
         return uproccessableEntity('Saldo tidak mencukupi');
       }

@@ -7,7 +7,7 @@ const { classes } = new PrismaClient();
 const show = async(req, res, next) => {
   try {
     const { id } = req.params;
-    const exist = await classes.findUnique({
+    const exist = await classes.findFirst({
       where: {
         name: req.body.name
       }
@@ -17,8 +17,10 @@ const show = async(req, res, next) => {
       return notFound('Kelas tidak ditemukan');
     }
 
-    const response = await classes.findUnique({
-      id
+    const response = await classes.findFirst({
+     where: {
+      id: Number(id)
+     }
     });
     
     return success(res, response, 'Kelas berhasil dihapus');

@@ -4,4 +4,5 @@ module.exports = {
   create: require('./create'),
   update: require('./update'),
   showAll: require('./showAll'),
+  nextGrade: require('./nextGrade'),
 }

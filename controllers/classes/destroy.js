@@ -7,7 +7,7 @@ const { classes } = new PrismaClient();
 const destroy = async(req, res, next) => {
   try {
     const { id } = req.params;
-    const exist = await classes.findUnique({
+    const exist = await classes.findFirst({
       where: {
         name: req.body.name
       }
@@ -19,7 +19,7 @@ const destroy = async(req, res, next) => {
 
     const response = await classes.delete({
       where: {
-        id
+        id: Number(id)
       }
     });
     return success(res, response, 'Kelas berhasil dihapus');

@@ -6,11 +6,11 @@ const { classes } = new PrismaClient();
 const update = async(req, res, next) => {
   try {
     const { id } = req.params;
-    const exist = await classes.findUnique({
+    const exist = await classes.findFirst({
       where: {
         name: req.body.name,
         id: {
-          not: id
+          not: Number(id)
         }
       }
     });
@@ -22,7 +22,7 @@ const update = async(req, res, next) => {
     const response = await classes.update({
       data: req.body,
       where: {
-        id
+        id: Number(id)
       }
     });
 

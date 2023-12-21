@@ -5,7 +5,7 @@ const { classes } = new PrismaClient();
 
 const create = async(req, res, next) => {
   try {
-    const exist = await classes.findUnique({
+    const exist = await classes.findFirst({
       where: {
         name: req.body.name
       }

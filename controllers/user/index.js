@@ -4,5 +4,5 @@ module.exports = {
   create: require('./create'),
   update: require('./update'),
   showAll: require('./showAll'),
-  updateThumbnail: require('./updateThumbnail')
+  updateThumbnail: require('./updateThumbnail'),
 }

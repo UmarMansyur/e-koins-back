@@ -9,7 +9,6 @@ const updateThumbnail = async (req, res, next) => {
   const { id } = req.params;
   const thumbnail = req.file;
   try {
-    console.log(thumbnail);
     const exist = await user.findFirst({ where: { id: Number(id) } });
     if (!exist) return uproccessableEntity(res, "User not found");
     if (exist.thumbnail) {

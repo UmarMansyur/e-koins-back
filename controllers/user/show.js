@@ -1,18 +1,21 @@
 const { PrismaClient } = require("@prisma/client");
 const { uproccessableEntity } = require("../../helpers/ApiError");
 const { success } = require("../../helpers/HandleResponse");
-const { user } = new PrismaClient();
+const { user, studentClass} = new PrismaClient();
 
 const show = async (req, res, next) => {
   try {
-    const { id, role } = req.params;
+    const { id } = req.params;
+    const { role = 'administrator' } = req.query;
     if(role === 'student') {
-      const exist = await user.findFirst({
+      const exist = await studentClass.findFirst({
         where: {
           id: Number(id),
         },
         include: {
-          StudentClass: true
+          student: true,
+          class: true,
+          academicYears: true
         }
       });
 
